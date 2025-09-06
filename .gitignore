@@ -1,0 +1,10 @@
+node_modules
+public/*.map
+public/hot
+.vite
+vendor
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*.zip

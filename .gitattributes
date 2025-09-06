@@ -1,0 +1,6 @@
+/.* export-ignore
+/node_modules export-ignore
+/tests export-ignore
+/.github export-ignore
+/.vscode export-ignore
+/.idea export-ignore

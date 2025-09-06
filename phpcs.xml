@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset name="TeamDirectory">
+  <file>src</file>
+  <arg name="basepath" value="." />
+  <rule ref="PSR12"/>
+</ruleset>

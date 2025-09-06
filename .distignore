@@ -1,0 +1,11 @@
+/node_modules
+/tests
+/.github
+/.vscode
+/.idea
+/.gitignore
+/.gitattributes
+/package-lock.json
+/vite.config.js
+/README_DEV.md
+/tsconfig.json
