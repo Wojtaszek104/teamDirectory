@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Team Directory – Employees & Departments
  * Description: Prosta baza pracowników z CSV importem, działami, lokalizacjami i ładnymi wizytówkami.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Requires at least: 6.2
  * Requires PHP: 8.0
  * Author: You
