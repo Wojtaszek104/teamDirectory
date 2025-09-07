@@ -1,30 +1,55 @@
 name: Build & Release ZIP
+
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # potrzebne, by dodać asset do Release
+
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: npm ci
-      - run: npm run build
-      - uses: shivammathur/setup-php@v2
-        with: { php-version: '8.2', coverage: none, tools: composer }
-      - run: composer install --no-dev --optimize-autoloader
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install NPM deps
+        run: npm ci
+
+      - name: Build assets (Vite)
+        run: npm run build
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+          tools: composer
+
+      - name: Install Composer (no dev)
+        run: composer install --no-dev --optimize-autoloader
+
       - name: Create ZIP (dist)
         run: |
           PLUGIN_SLUG=team-directory
-          DIST_DIR=${PLUGIN_SLUG}
-          mkdir -p ${DIST_DIR}
-          rsync -av --exclude-from='.distignore' ./ ${DIST_DIR}/
-          zip -r ${PLUGIN_SLUG}.zip ${DIST_DIR}
-          echo "ZIP_PATH=${PLUGIN_SLUG}.zip" >> $GITHUB_ENV
-      - name: Release
+          DIST_DIR=$PLUGIN_SLUG
+          mkdir -p "$DIST_DIR"
+          rsync -av --exclude-from='.distignore' ./ "$DIST_DIR"/
+          zip -rq "$PLUGIN_SLUG".zip "$DIST_DIR"
+          echo "ZIP_PATH=$PLUGIN_SLUG.zip" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        with: { files: ${{ env.ZIP_PATH }} }
-        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
+        with:
+          files: ${{ env.ZIP_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
